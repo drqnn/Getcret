@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奖项分类展示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .category {
+            margin-bottom: 20px;
+        }
+        .category h2 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        .award {
+            margin: 10px 0;
+        }
+        #results img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        async function fetchAwardImage() {
+            const name = document.getElementById('name').value.trim();
+            const award = document.getElementById('award').value.trim();
+            if (!name || !award) {
+                alert('请输入姓名并选择奖项！');
+                return;
+            }
+
+            const url = `https://api.pearktrue.cn/api/certcommend/?name=${encodeURIComponent(name)}&title=${encodeURIComponent(award)}&classname=河底中学`;
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const imageBlob = await response.blob();
+                    const imageUrl = URL.createObjectURL(imageBlob);
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imageUrl;
+                    const categoryElement = document.getElementById(award.split('奖')[0] + '类');
+                    categoryElement.appendChild(imgElement);
+                } else {
+                    alert('获取图片失败，请稍后再试！');
+                }
+            } catch (error) {
+                alert('请求失败，请检查网络连接！');
+                console.error(error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>奖项分类展示</h1>
+    <div>
+        <label for="name">姓名：</label>
+        <input type="text" id="name" placeholder="请输入姓名">
+        <label for="award">奖项：</label>
+        <select id="award">
+            <option value="">请选择奖项</option>
+            <optgroup label="身心健康类">
+                <option>运动先锋奖</option>
+                <option>健康生活奖</option>
+                <option>心理阳光奖</option>
+                <option>耐力突破奖</option>
+                <option>健康促进奖</option>
+            </optgroup>
+            <optgroup label="艺术素养类">
+                <option>艺术创新奖</option>
+                <option>最佳表演奖</option>
+                <option>艺术传承奖</option>
+                <option>视觉设计奖</option>
+                <option>音乐之星奖</option>
+            </optgroup>
+            <optgroup label="学业水平类">
+                <option>学术进步奖</option>
+                <option>优秀读书奖</option>
+                <option>逻辑思维奖</option>
+                <option>学习榜样奖</option>
+                <option>知识探索奖</option>
+            </optgroup>
+            <optgroup label="社会实践类">
+                <option>劳动楷模奖</option>
+                <option>志愿服务奖</option>
+                <option>环保先锋奖</option>
+                <option>校园服务奖</option>
+                <option>实践达人奖</option>
+            </optgroup>
+            <optgroup label="综合表现类">
+                <option>进步学生奖</option>
+                <option>团队合作奖</option>
+                <option>创新思维奖</option>
+                <option>领导力奖</option>
+                <option>全能之星奖</option>
+            </optgroup>
+        </select>
+        <button onclick="fetchAwardImage()">确定</button>
+    </div>
+    <div id="results">
+        <div class="category" id="身心健康类">
+            <h2>身心健康类</h2>
+        </div>
+        <div class="category" id="艺术素养类">
+            <h2>艺术素养类</h2>
+        </div>
+        <div class="category" id="学业水平类">
+            <h2>学业水平类</h2>
+        </div>
+        <div class="category" id="社会实践类">
+            <h2>社会实践类</h2>
+        </div>
+        <div class="category" id="综合表现类">
+            <h2>综合表现类</h2>
+        </div>
+    </div>
+</body>
+</html>
